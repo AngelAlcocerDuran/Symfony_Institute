@@ -15,8 +15,6 @@ const getSchools = async() => {
         +"<th scope='col'>#</th>"
         +"<th scope='col'>Nombre</th>"
         +"<th scope='col'>Calle</th>"
-        +"<th scope='col'>Creado</th>"
-        +"<th scope='col'>Actualizado</th>"
         +"<th scope='col'>Estado</th>"
         +"<th scope='col' class='text-center'>Detalles</th>"
         +"<th scope='col' class='text-center'>Editar</th>"
@@ -28,8 +26,6 @@ const getSchools = async() => {
             +"<td>"+listSchools[i].id + "</td>"
             +"<td>"+listSchools[i].name + "</td>"
             +"<td>"+listSchools[i].street + "</td>"
-            +"<td>"+listSchools[i].created + "</td>"
-            +"<td>"+listSchools[i].updated + "</td>"
             +"<td>"+listSchools[i].status + "</td>"
             +"<td class='text-center'><button class='btn btn-primary' data-toggle='modal' data-target='#details' onclick='getDetails("+listSchools[i].id+")'><i class='fas fa-info-circle'></i></button></td>"
             +"<td class='text-center'><button class='btn btn-warning' data-toggle='modal' data-target='#update' onclick='getInfoUpdate("+listSchools[i].id+")'><i class='far fa-edit'></i></button></td>"
@@ -48,9 +44,18 @@ const getById = async (id) => {
 
 const getDetails = async (id) => {
     let school = await getById(id);
+    let c = new Date(school.school[0].created.date);
+
     document.getElementById('name').innerHTML = school.school[0].name;
     document.getElementById('street').innerHTML = school.school[0].street;
     document.getElementById('status').innerHTML = school.school[0].status ? "Activo" : "Inactivo";
+    document.getElementById('created').innerHTML = c.getDate()+'-'+c.getMonth()+'-'+c.getFullYear();
+    if(school.school[0].updated == null){
+        document.getElementById('updated').innerHTML = 'Sin Actualización';
+    }else{
+        let u = new Date(school.school[0].updated.date);
+        document.getElementById('updated').innerHTML = u.getDate()+'-'+u.getMonth()+'-'+u.getFullYear();
+    }
 }
 
 const getInfoUpdate = async (id) => {
@@ -60,13 +65,13 @@ const getInfoUpdate = async (id) => {
     document.getElementById('u_street').value = school.school[0].street;
 }
 
-const updateSchool = async() => {
+const updateSchool = () => {
     console.log('Espere...');
     let id = document.getElementById('u_id').value;
     let name = document.getElementById('u_name').value;
     let street = document.getElementById('u_street').value;
 
-    await $.ajax({
+    $.ajax({
         type: 'POST',
         url: url + '/school/update/' + id,
         data: {name, street}
@@ -75,12 +80,12 @@ const updateSchool = async() => {
     });
 }
 
-const createSchool = async() => {
+const createSchool = () => {
     console.log('Espere...');
     let name = document.getElementById('c_name').value;
     let street = document.getElementById('c_street').value;
 
-    await $.ajax({
+    $.ajax({
         type: 'POST',
         url: url + '/school/create',
         data: {name, street}

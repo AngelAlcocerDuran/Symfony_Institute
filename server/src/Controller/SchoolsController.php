@@ -54,11 +54,13 @@ class SchoolsController extends AbstractController
 
         $name = $request->get('name', null);
         $street = $request->get('street', null);
+        $created = new \DateTime('now', new \DateTimeZone('America/Mexico_City'));
 
         $school = new \App\Entity\Schools();
 
         $school->setName($name);
         $school->setStreet($street);
+        $school->setCreated($created);
         $school->setStatus(1);
 
         $em->persist($school);
@@ -74,13 +76,15 @@ class SchoolsController extends AbstractController
 
     public function update(Request $request, $id){
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery('UPDATE App:Schools s SET s.name = :name, s.street = :street WHERE s.id = :id');
+        $query = $em->createQuery('UPDATE App:Schools s SET s.name = :name, s.street = :street, s.updated = :updated WHERE s.id = :id');
 
         $name = $request->get('name', null);
         $street = $request->get('street', null);
+        $updated = new \DateTime('now', new \DateTimeZone('America/Mexico_City'));
 
         $query->setParameter(':name', $name);
         $query->setParameter(':street', $street);
+        $query->setParameter(':updated', $updated);
         $query->setParameter(':id', $id);
         $flag = $query->getResult();
 
