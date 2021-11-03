@@ -89,7 +89,7 @@ class SchoolsController extends AbstractController
         $flag = $query->getResult();
 
         if($flag == 1){
-            $data = ['status' => 200, 'message' => 'Producto actualizado'];
+            $data = ['status' => 200, 'message' => 'Escuela actualizada'];
         }else{
             $data = ['status' => 400, 'message' => 'Error de actualización'];
         }

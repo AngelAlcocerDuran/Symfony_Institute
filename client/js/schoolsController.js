@@ -1,4 +1,4 @@
-const url = 'http://localhost:8080/institute/server/public/index.php'
+const url = 'http://localhost/institute/server/public/index.php'
 
 const getSchools = async() => {
     await $.ajax({
@@ -60,18 +60,20 @@ const getDetails = async (id) => {
 
 const getInfoUpdate = async (id) => {
     let school = await getById(id);
-    document.getElementById('u_id').value = school.school[0].id;
+    document.getElementById('u_id').value = id;
     document.getElementById('u_name').value = school.school[0].name;
     document.getElementById('u_street').value = school.school[0].street;
 }
 
-const updateSchool = () => {
+const updateSchool = async () => {
     console.log('Espere...');
     let id = document.getElementById('u_id').value;
     let name = document.getElementById('u_name').value;
     let street = document.getElementById('u_street').value;
 
-    $.ajax({
+    console.log(id+name+street);
+
+    await $.ajax({
         type: 'POST',
         url: url + '/school/update/' + id,
         data: {name, street}
